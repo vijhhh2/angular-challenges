@@ -1,13 +1,14 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
+import { HeavyComputationPipe } from './pipes/heavy-computation.pipe';
 
 @Component({
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor, HeavyComputationPipe],
   selector: 'app-root',
   template: `
     <div *ngFor="let person of persons; let index = index">
-      {{ heavyComputation(person, index) }}
+      {{ person | heavyComputation: index }}
     </div>
   `,
 })
