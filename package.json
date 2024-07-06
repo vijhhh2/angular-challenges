@@ -37,7 +37,8 @@
     "rxjs": "7.8.1",
     "tailwindcss": "3.4.3",
     "tslib": "^2.3.0",
-    "zone.js": "0.14.2"
+    "zone.js": "0.14.2",
+    "@ngrx/signals": "^17.2.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "18.0.1",
@@ -54,11 +55,12 @@
     "@cypress/webpack-dev-server": "3.8.0",
     "@hirez_io/observer-spy": "^2.2.0",
     "@ngrx/schematics": "17.0.1",
+    "@ngrx/signals": "^17.2.0",
     "@nx/cypress": "19.1.0",
     "@nx/devkit": "19.1.0",
     "@nx/eslint": "19.1.0",
     "@nx/eslint-plugin": "19.1.0",
-    "@nx/jest": "19.1.0",
+    "@nx/jest": "^19.1.0",
     "@nx/js": "19.1.0",
     "@nx/plugin": "19.1.0",
     "@nx/workspace": "19.1.0",
