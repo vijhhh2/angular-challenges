@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
+import {
+  slideInAnimation,
+  slideInSequenceAnimation,
+} from './animations/slide-in';
 
 @Component({
   standalone: true,
   imports: [],
+  animations: [slideInAnimation, slideInSequenceAnimation],
   selector: 'app-root',
   styles: `
     section {
@@ -19,7 +24,7 @@ import { Component } from '@angular/core';
   `,
   template: `
     <div class="mx-20 my-40 flex gap-5">
-      <section>
+      <section [@slideIn]="'in'">
         <div>
           <h3>2008</h3>
           <p>
@@ -51,7 +56,7 @@ import { Component } from '@angular/core';
         </div>
       </section>
 
-      <section>
+      <section @slideInSequence>
         <div class="list-item">
           <span>Name:</span>
           <span>Samuel</span>
