@@ -11,14 +11,8 @@ export class TodoService {
   todos = signal<Todo[]>([]);
   loading = signal<boolean>(false);
 
-  getAllTodos(): void {
-    this.loading.set(true);
-    this.http
-      .get<Todo[]>('https://jsonplaceholder.typicode.com/todos')
-      .subscribe((todos) => {
-        this.todos.set(todos);
-        this.loading.set(false);
-      });
+  getAllTodos() {
+    return this.http.get<Todo[]>('https://jsonplaceholder.typicode.com/todos');
   }
 
   update(todo: Todo) {
@@ -54,11 +48,13 @@ export class TodoService {
       );
   }
 
-  delete(todo: Todo): void {
-    this.http
+  delete(todo: Todo) {
+    return this.http
       .delete(`https://jsonplaceholder.typicode.com/todos/${todo.id}`)
-      .subscribe(() => {
-        this.todos.set(this.todos().filter((t) => t.id !== todo.id));
-      });
+      .pipe(
+        tap(() => {
+          this.todos.set(this.todos().filter((t) => t.id !== todo.id));
+        }),
+      );
   }
 }

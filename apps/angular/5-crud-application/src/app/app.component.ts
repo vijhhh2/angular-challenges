@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { TodoService } from './data-access/todo.service';
 import { TodoItemComponent } from './UI/todo-item/todo-item.component';
+import { TodosStore } from './store/todos.store';
 
 @Component({
   standalone: true,
@@ -12,21 +12,24 @@ import { TodoItemComponent } from './UI/todo-item/todo-item.component';
   template: `
     @if (loading()) {
       <mat-spinner></mat-spinner>
-    } @else {
+    }
+
+    @if (!todosStore.error() && !loading()) {
       @for (todo of todos(); track $index) {
         <app-todo-item [todo]="todo" />
       }
     }
+
+    @if (todosStore.error() && !loading()) {
+      Encountered error {{ todosStore.error() }}
+    }
   `,
   styles: [],
+  providers: [TodosStore],
 })
-export class AppComponent implements OnInit {
-  private todoService = inject(TodoService);
+export class AppComponent {
+  readonly todosStore = inject(TodosStore);
 
-  todos = this.todoService.todos;
-  loading = this.todoService.loading;
-
-  ngOnInit(): void {
-    this.todoService.getAllTodos();
-  }
+  todos = this.todosStore.todos;
+  loading = this.todosStore.loading;
 }

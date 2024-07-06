@@ -3,9 +3,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  input,
+  Input,
 } from '@angular/core';
-import { TodoService } from '../../data-access/todo.service';
 import { Todo } from '../../model/todo.model';
 import { TodoStore } from './todo-item.store';
 
@@ -18,11 +17,11 @@ import { TodoStore } from './todo-item.store';
       {{ store.error()?.message }}
     } @else {
       <div class="todo-item">
-        {{ todo().title }}
-        <button (click)="update(todo())" [disabled]="store.updating()">
+        {{ store.todo()?.title }}
+        <button (click)="update(store.todo()!)" [disabled]="store.updating()">
           Update
         </button>
-        <button (click)="delete(todo())" [disabled]="store.updating()">
+        <button (click)="delete(store.todo()!)" [disabled]="store.updating()">
           Delete
         </button>
       </div>
@@ -38,22 +37,15 @@ import { TodoStore } from './todo-item.store';
 })
 export class TodoItemComponent {
   readonly store = inject(TodoStore);
-  private readonly todoService = inject(TodoService);
-  todo = input.required<Todo>();
+  @Input() set todo(value: Todo) {
+    this.store.updateTodo(value);
+  }
 
   update(todo: Todo) {
-    this.store.updateUpdating(true);
-    this.todoService.update(todo).subscribe({
-      next: () => {
-        this.store.updateUpdating(false);
-      },
-      error: (error: any) => {
-        this.store.updateError(error);
-      },
-    });
+    this.store.updateTodoItem(todo);
   }
 
   delete(todo: Todo) {
-    this.todoService.delete(todo);
+    this.store.deleteTodoItem(todo);
   }
 }
