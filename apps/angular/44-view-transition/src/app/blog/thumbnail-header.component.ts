@@ -9,6 +9,7 @@ import { Component, input } from '@angular/core';
     <div class="flex gap-3">
       <img
         ngSrc="assets/profil.webp"
+        [style]="'view-transition-name: avatar-' + id()"
         alt=""
         class="rounded-full border border-black p-0.5"
         width="50"
@@ -18,7 +19,12 @@ import { Component, input } from '@angular/core';
         <span class="text-sm">{{ date() }}</span>
       </div>
     </div>
-    <img ngSrc="assets/angular.webp" alt="" width="50" height="50" />
+    <img
+      ngSrc="assets/angular.webp"
+      alt=""
+      width="50"
+      height="50"
+      [style]="'view-transition-name: angular-' + id()" />
   `,
   host: {
     class: 'flex w-full px-4 py-5 gap-4 justify-between',
@@ -26,4 +32,5 @@ import { Component, input } from '@angular/core';
 })
 export class ThumbnailHeaderComponent {
   date = input.required<string>();
+  id = input.required<string>();
 }

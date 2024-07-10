@@ -26,9 +26,14 @@ import { PostHeaderComponent } from './post-header.component';
         class="absolute left-2 top-2 z-20 rounded-md border bg-white p-2">
         Back
       </button>
-      <img [ngSrc]="post().image" alt="" width="960" height="540" />
+      <img
+        [ngSrc]="post().image"
+        alt=""
+        width="960"
+        height="540"
+        [style]="'view-transition-name: image-' + post().id" />
       <h2 class="p-7 text-center text-5xl">{{ post().title }}</h2>
-      <post-header [date]="post().date" class="mb-20" />
+      <post-header [date]="post().date" [id]="post().id" class="mb-20" />
       @for (chapter of fakeTextChapter; track $index) {
         <p class="mt-6 px-3">{{ chapter }}</p>
       }

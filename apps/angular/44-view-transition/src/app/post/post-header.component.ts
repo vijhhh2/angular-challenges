@@ -9,12 +9,14 @@ import { Component, input } from '@angular/core';
     <div class="relative">
       <img
         ngSrc="assets/profil.webp"
+        [style]="'view-transition-name: avatar-' + id()"
         alt=""
         class="rounded-full border border-black p-0.5"
         width="50"
         height="50" />
       <img
         ngSrc="assets/angular.webp"
+        [style]="'view-transition-name: angular-' + id()"
         alt=""
         width="30"
         height="30"
@@ -29,4 +31,5 @@ import { Component, input } from '@angular/core';
 })
 export class PostHeaderComponent {
   date = input.required<string>();
+  id = input.required<string>();
 }

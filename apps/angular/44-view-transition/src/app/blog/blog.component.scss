@@ -1,0 +1,31 @@
+.app-bar {
+  view-transition-name: app-bar;
+}
+
+::view-transition-old(app-bar) {
+  animation-name: app-bar-animation-out;
+  animation-duration: 5s;
+}
+
+::view-transition-new(app-bar) {
+  animation-name: app-bar-animation-in;
+  animation-duration: 5s;
+}
+
+@keyframes app-bar-animation-in {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes app-bar-animation-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}

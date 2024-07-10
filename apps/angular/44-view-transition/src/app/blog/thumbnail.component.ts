@@ -12,6 +12,7 @@ import { ThumbnailHeaderComponent } from './thumbnail-header.component';
     <a [routerLink]="['post', post().id]">
       <img
         [ngSrc]="post().image"
+        [style]="'view-transition-name: image-' + post().id"
         alt=""
         width="960"
         height="540"
@@ -19,7 +20,7 @@ import { ThumbnailHeaderComponent } from './thumbnail-header.component';
         [priority]="post().id === '1'" />
       <h2 class="p-3 text-3xl">{{ post().title }}</h2>
       <p class="p-3">{{ post().description }}</p>
-      <thumbnail-header [date]="post().date" />
+      <thumbnail-header [date]="post().date" [id]="post().id" />
     </a>
   `,
   host: {
