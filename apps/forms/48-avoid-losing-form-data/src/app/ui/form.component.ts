@@ -1,12 +1,30 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {
+  ControlContainer,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-form',
   standalone: true,
   imports: [ReactiveFormsModule],
+  viewProviders: [
+    {
+      provide: ControlContainer,
+      useFactory: () => inject(ControlContainer, { skipSelf: true }),
+    },
+  ],
   template: `
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div class="space-y-4">
       <div>
         <label class="sr-only" for="name">Name</label>
         <input
@@ -49,30 +67,38 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
           formControlName="message"
           id="message"></textarea>
       </div>
-
-      <div class="mt-4">
-        <button
-          [disabled]="form.invalid"
-          type="submit"
-          class="inline-block w-full rounded-lg border bg-gray-50 px-5 py-3 font-medium text-gray-900 disabled:cursor-not-allowed disabled:bg-gray-300 sm:w-auto">
-          Submit
-        </button>
-      </div>
-    </form>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormComponent {
-  private fb = inject(FormBuilder);
+export class FormComponent implements OnInit, OnDestroy {
+  controlContainer = inject(ControlContainer);
 
-  form = this.fb.nonNullable.group({
-    name: ['', { validators: [Validators.required] }],
-    email: ['', [Validators.required, Validators.email]], // other syntax
-    phone: '',
-    message: '',
-  });
+  get parentFormGroup() {
+    return this.controlContainer.control as FormGroup;
+  }
 
-  onSubmit() {
-    if (this.form.valid) this.form.reset();
+  get isNotValid() {
+    return this.parentFormGroup.invalid;
+  }
+
+  ngOnInit(): void {
+    this.parentFormGroup.addControl(
+      'name',
+      new FormControl('', [Validators.required]),
+    );
+    this.parentFormGroup.addControl(
+      'email',
+      new FormControl('', [Validators.required, Validators.email]),
+    );
+    this.parentFormGroup.addControl('phone', new FormControl(''));
+    this.parentFormGroup.addControl('message', new FormControl(''));
+  }
+
+  ngOnDestroy(): void {
+    this.parentFormGroup.removeControl('name');
+    this.parentFormGroup.removeControl('email');
+    this.parentFormGroup.removeControl('phone');
+    this.parentFormGroup.removeControl('message');
   }
 }

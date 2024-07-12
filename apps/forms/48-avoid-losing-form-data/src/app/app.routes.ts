@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { CanDeactivateFormGuard } from './gurads/can-deactivate.guard';
 import { JoinComponent } from './pages/join.component';
 import { PageComponent } from './pages/page.component';
 
@@ -11,6 +12,7 @@ export const appRoutes: Route[] = [
   {
     path: 'form',
     loadComponent: () => JoinComponent,
+    canDeactivate: [CanDeactivateFormGuard],
   },
   {
     path: 'page-1',
