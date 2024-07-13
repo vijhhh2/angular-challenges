@@ -1,6 +1,7 @@
 import { AsyncPipe, NgIf } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, NgZone, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BehaviorSubject, fromEvent } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -31,14 +32,29 @@ import { BehaviorSubject } from 'rxjs';
     `,
   ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'scroll-cd';
 
   private displayButtonSubject = new BehaviorSubject<boolean>(false);
   displayButton$ = this.displayButtonSubject.asObservable();
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll() {
+  private readonly ngZone = inject(NgZone);
+  scroll$ = fromEvent(window, 'scroll').pipe(takeUntilDestroyed());
+
+  //   @HostListener('window:scroll', ['$event'])
+  //   onScroll() {
+  //  this.handleScrollEvent();
+  //   }
+
+  ngOnInit(): void {
+    this.ngZone.runOutsideAngular(() => {
+      this.scroll$.subscribe(() => {
+        this.handleScrollEvent();
+      });
+    });
+  }
+
+  private handleScrollEvent() {
     const pos = window.pageYOffset;
     this.displayButtonSubject.next(pos > 50);
   }
