@@ -10,7 +10,24 @@ export class HeavyCalculationService {
   );
 
   startLoading() {
-    this.randomHeavyCalculationFunction();
+    if (typeof Worker !== 'undefined') {
+      // Create a new
+      const worker = new Worker(
+        new URL('./heavy-calculation-worker.worker', import.meta.url),
+      );
+      worker.onmessage = ({ data }) => {
+        if (data.data !== 'done') {
+          this.loadingLength.set(data.data);
+        } else {
+          console.log(`page got message ${data.data}`);
+        }
+      };
+      worker.postMessage({ data: 'start' });
+    } else {
+      // Web Workers are not supported in this environment.
+      // You should add a fallback so that your program still executes correctly.
+      this.randomHeavyCalculationFunction();
+    }
   }
 
   private randomHeavyCalculationFunction() {
